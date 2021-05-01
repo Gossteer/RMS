@@ -1,0 +1,15 @@
+{
+    "name": "vendor/rms",
+    "description": "rooms management system",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\": "app",
+            "Tests\\": "tests"
+        },
+        "files": [
+            "config.php",
+            "app/routes.php"
+        ]
+    }
+}
