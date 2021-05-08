@@ -1,5 +1,7 @@
-<?php include APP . '/views/layouts/header.php'; ?>
+{{ include('/layouts/header.php') }}
 
-<h1>Hello world</h1>
+{{ include('/components/form.php') }}
 
-<?php include APP . '/views/layouts/footer.php'; ?>
+{{ include('/components/table.php') }}
+
+{{ include('/layouts/footer.php') }}

@@ -14,4 +14,4 @@ require_once ROOT . '/vendor/autoload.php';
 $router = new Router();
 $router->run();
 
-var_dump($_SESSION);
+// var_dump($_SESSION);

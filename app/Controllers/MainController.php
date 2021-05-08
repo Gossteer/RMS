@@ -2,9 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Components\TemplateEngine\TemplateEngine;
 use App\Models\Employee;
 use App\Models\Hotel;
 use App\Models\HotelCategory;
+use Twig\Template;
 
 class MainController
 {
@@ -38,17 +40,14 @@ class MainController
 
         // var_dump($test->oneToMany('Hotel')->first());
 
-        $test = Hotel::find(0)->oneToMany('Employee')->first();
+        // $test = Hotel::find(0)->oneToMany('Employee')->first();
         // foreach ($test->getData() as $key => $value) {
         //     echo "<br>";
         //     var_dump($value);
         // }
-        var_dump($test);
+        // var_dump($test);
         
-        
-        require_once( APP . '/views/main/index.php');
-        
-        return true;
+        return TemplateEngine::getInstance()->render('main/index.php', ['pelmen' => 'lol']);
     }
 
     /**

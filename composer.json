@@ -11,5 +11,8 @@
             "config.php",
             "app/routes.php"
         ]
+    },
+    "require": {
+        "twig/twig": "^3.0"
     }
 }

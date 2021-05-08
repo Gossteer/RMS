@@ -14,6 +14,7 @@ class Router
      * @var array 
      */
     private array $routes;
+    private $result;
 
     /**
      * Конструктор
@@ -69,13 +70,20 @@ class Router
                 /* Вызываем необходимый метод ($actionName) у определенного 
                  * класса ($controllerObject) с заданными ($parameters) параметрами
                  */
-                $result = call_user_func_array(array($controllerObject, $actionName), $parameters);
+                $this->result = call_user_func_array(array($controllerObject, $actionName), $parameters);
 
                 // Если метод контроллера успешно вызван, завершаем работу роутера
-                if ($result != null) {
+                if ($this->result != null) {
+                    $this->showResult();
+
                     break;
                 }
             }
         }
+    }
+
+    private function showResult()
+    {
+        echo $this->result;
     }
 }
