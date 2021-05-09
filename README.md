@@ -4,5 +4,8 @@
 
 composer install
 
+need nodejs 14
+
 npm i
-npm build
+
+npm run build
