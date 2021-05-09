@@ -8,4 +8,5 @@ interface iCollection {
     public function delete(int $id): bool;
     public function getData();
     public function first();
+    public function count(): int;
 }

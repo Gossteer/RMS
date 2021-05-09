@@ -56,6 +56,11 @@ abstract class Collection implements iCollection {
         throw new Exception('Данные не найдены');
     }
 
+    public function count(): int
+    {
+        return count($this->data);
+    }
+
     //Удаление из самой коллекции здесь, а из базы в классе датабазе модел коллектион
 
 }

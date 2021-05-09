@@ -3,7 +3,8 @@
 namespace App\Controllers;
 
 use App\Components\TemplateEngine\TemplateEngine;
-
+use App\Models\Hotel;
+use App\Models\HotelCategory;
 
 class MainController
 {
@@ -13,8 +14,10 @@ class MainController
      */
     public function index()
     {
-        
-        return TemplateEngine::getInstance()->render('main/index.php', ['pelmen' => 'lol']);
+        return TemplateEngine::getInstance()->render('main/index.php', [
+            'hotels' => Hotel::all()->getData(),
+            'hotel_categories' => HotelCategory::all()->getData()
+        ]);
     }
 
     /**
@@ -58,7 +61,7 @@ class MainController
     //     require_once(ROOT . '/views/site/contact.php');
     //     return true;
     // }
-    
+
     /**
      * Action для страницы "О магазине"
      */
