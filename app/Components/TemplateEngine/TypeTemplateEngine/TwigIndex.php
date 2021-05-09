@@ -12,7 +12,7 @@ class TwigIndex implements iTypeTemplateEngine {
     private Environment $twig;
 
     public final function __construct() {
-        $this->loader = new FilesystemLoader('App\Views');
+        $this->loader = new FilesystemLoader('app/Views');
         $this->twig = new Environment($this->loader);
     }
 
