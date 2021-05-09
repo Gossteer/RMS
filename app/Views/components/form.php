@@ -1,4 +1,4 @@
-<form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
+<form action="" method="POST" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
     <div class="-mx-3 md:flex mb-2">
         <div class="md:w-full px-3">
             <label class="block uppercase tracking-wide text-grey-darker text-xs font-bold mb-2" for="grid-password">
