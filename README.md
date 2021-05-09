@@ -9,3 +9,5 @@ need nodejs 14
 npm i
 
 npm run build
+
+php -S localhost:8000
