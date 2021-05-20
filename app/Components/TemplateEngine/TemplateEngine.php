@@ -2,6 +2,9 @@
 
 namespace App\Components\TemplateEngine;
 
+use App\Components\Interfaces\iTypeTemplateEngine;
+use App\Components\Setting;
+
 class TemplateEngine {
     /**
      * Объект одиночки храниться в статичном поле класса. Это поле — массив, так
@@ -9,8 +12,8 @@ class TemplateEngine {
      * массива будут экземплярами кокретных подклассов Одиночки. Не волнуйтесь,
      * мы вот-вот познакомимся с тем, как это работает.
      */
-    private static $template_engine;
-    private object $type_template_engine;
+    private static TemplateEngine $template_engine;
+    private iTypeTemplateEngine $type_template_engine;
 
     /**
      * Конструктор Одиночки всегда должен быть скрытым, чтобы предотвратить
@@ -56,8 +59,7 @@ class TemplateEngine {
     //Выбираем с каким типом шаблонизатором мы будем работать
     private function setSetting()
     {
-        $get_type_template_engine = 'App\Components\TemplateEngine\TypeTemplateEngine\\' . ucfirst(CONFIG['TemplateEngine']['type']) . 'Index';
-        $this->type_template_engine = new $get_type_template_engine;
+        $this->type_template_engine = Setting::getTypeTemplateEngine();
     }
 
     //рендерим представление

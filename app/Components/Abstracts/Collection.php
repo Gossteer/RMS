@@ -2,20 +2,23 @@
 
 namespace App\Components\Abstracts;
 
+use App\Components\Abstracts\Fillable as AbstractsFillable;
 use App\Components\Interfaces\iCollection;
+use App\Components\Traits\Fillable;
 use Exception;
 
 abstract class Collection implements iCollection {
+    use Fillable;
     protected array $data = [];
     protected string $model_name;
 
-    public function setData(array $data = []): void
+    protected function setCollection(array $data = []): void
     {
         $this->data = $data;
     }
 
-    public function __construct(array $data = [], string $model_name) {
-        $this->setData($data);
+    public function __construct(AbstractsFillable $fillable, string $model_name) {
+        $this->setCollection($fillable->toArray());
         $this->model_name = $model_name;
     }
 
@@ -40,7 +43,7 @@ abstract class Collection implements iCollection {
         throw new Exception('Данные не найдены');
     }
 
-    public function getData(): array
+    public function toArray(): array
     {
         return $this->data;
     }

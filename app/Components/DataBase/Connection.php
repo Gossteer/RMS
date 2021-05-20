@@ -2,7 +2,11 @@
 
 namespace App\Components\DataBase;
 
-class Connection
+use App\Components\Abstracts\Fillable;
+use App\Components\Interfaces\iTypeConnection;
+use App\Components\Setting;
+
+class Connection implements iTypeConnection
 {
     /**
      * Объект одиночки храниться в статичном поле класса. Это поле — массив, так
@@ -10,8 +14,8 @@ class Connection
      * массива будут экземплярами кокретных подклассов Одиночки. Не волнуйтесь,
      * мы вот-вот познакомимся с тем, как это работает.
      */
-    private static $connection;
-    private object $typeconnection;
+    private static Connection $connection;
+    private iTypeConnection $typeconnection;
 
     /**
      * Конструктор Одиночки всегда должен быть скрытым, чтобы предотвратить
@@ -57,17 +61,16 @@ class Connection
     //Выбираем с каким типом подключения к данным мы будем работать
     private function setSetting()
     {
-        $gettypeconnection = 'App\Components\DataBase\TypeConnection\\' . ucfirst(CONFIG['Database']['type']) . 'Connection';
-        $this->typeconnection = new $gettypeconnection;
+        $this->typeconnection = Setting::getTypeConnection();
     }
 
     //Есть $count = null, то вытаскиваем все данные
-    public function getData(string $modal_name, int $count = null, int $id = null, $equal_field = null, $equal_value= null): array
+    public function getData(string $modal_name, int $count = null, int $id = null, $equal_field = null, $equal_value= null): Fillable
     {
         return $this->typeconnection->getData($modal_name, $count, $id, $equal_field, $equal_value);
     }
     
-    public function setData(string $modal_name, int $id, array $fillable): bool
+    public function setData(string $modal_name, int $id, Fillable $fillable): bool
     {
         return $this->typeconnection->setData($modal_name, $id, $fillable);
     }
@@ -77,7 +80,7 @@ class Connection
         return $this->typeconnection->deleteData($modal_name, $id);
     }
 
-    public function saveData(string $modal_name, array $fillable): int
+    public function saveData(string $modal_name, Fillable $fillable): int
     {
         return $this->typeconnection->saveData($modal_name, $fillable);
     }

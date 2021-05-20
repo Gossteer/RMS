@@ -2,7 +2,7 @@
 
 namespace App\Components;
 
-use App\Components\Request\Request;
+use App\Components\Abstracts\Request;
 
 /**
  * Класс Router
@@ -101,7 +101,7 @@ class Router
 
     private function getRequest(array $parameters = [], array $get = [], array $post = []): Request
     {
-        return new Request([
+        return Setting::getRequest([
             'get' => $get,
             'post' => $post,
             'parameters' => $parameters

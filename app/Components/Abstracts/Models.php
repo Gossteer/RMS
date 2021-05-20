@@ -4,48 +4,51 @@ namespace App\Components\Abstracts;
 
 use App\Components\DataBase\Connection;
 use App\Components\DataBase\DataBaseModelCollection;
-use App\Components\Interfaces\iFillable;
 use App\Components\Interfaces\iModels;
 use App\Components\Interfaces\iRelationship;
+use App\Components\Setting;
 use App\Components\Traits\Fillable;
 use App\Components\Traits\Relationship;
 use Exception;
 
-abstract class Models implements iModels, iFillable, iRelationship
+abstract class Models implements iModels, iRelationship
 {
     use Fillable, Relationship;
 
     private ?int $id = null;
 
+    private static function getModelForStaticClass(): string
+    {
+        return substr(strrchr(static::class, "\\"), 1);
+    }
+
     public static function all(): DataBaseModelCollection
     {
-        $model_name = static::class;
-
-        return new DataBaseModelCollection(Connection::getInstance()->getData(substr(strrchr($model_name, "\\"), 1)), $model_name);
+        return new DataBaseModelCollection(Connection::getInstance()->getData(self::getModelForStaticClass()), static::class);
     }
 
     public static function equalGet($equal_field, $equal_value): DataBaseModelCollection
     {
-        $model_name = static::class;
-
-        return new DataBaseModelCollection(Connection::getInstance()->getData(substr(strrchr($model_name, "\\"), 1), null, null, $equal_field, $equal_value), $model_name);
+        return new DataBaseModelCollection(Connection::getInstance()->getData(self::getModelForStaticClass(), null, null, $equal_field, $equal_value), static::class);
     }
 
-    public function __construct(array $data = [])
+    public function __construct($data)
     {
-        $this->fillable();
+        $this->setFillable(Setting::getFillable($this->fillable));
+
+        $this->set_fillable->fillable();
 
         if (isset($data['id'])) {
             $this->setId($data['id']);
             unset($data['id']);
         }
 
-        $this->setFillable($data);
+        $this->set_fillable->setFillable($data);
     }
 
     public static function find(int $id): self
     {
-        $data = Connection::getInstance()->getData(substr(strrchr(static::class, "\\"), 1), 1, $id);
+        $data = Connection::getInstance()->getData(self::getModelForStaticClass(), 1, $id);
 
         if ($data) {
             return new static($data);
@@ -56,13 +59,13 @@ abstract class Models implements iModels, iFillable, iRelationship
 
     public static function delete(int $id): bool
     {
-        return Connection::getInstance()->deleteData(substr(strrchr(static::class, "\\"), 1), $id);
+        return Connection::getInstance()->deleteData(self::getModelForStaticClass(), $id);
     }
 
     public function destroy(): bool
     {
         if ($this->id) {
-            return Connection::getInstance()->deleteData(substr(strrchr(static::class, "\\"), 1), $this->id);
+            return Connection::getInstance()->deleteData(self::getModelForStaticClass(), $this->id);
         }
 
         return false;
@@ -71,17 +74,17 @@ abstract class Models implements iModels, iFillable, iRelationship
     public function save(): bool
     {
         if (is_int($this->id)) {
-            return Connection::getInstance()->setData(substr(strrchr(static::class, "\\"), 1), $this->id, $this->fillable);
+            return Connection::getInstance()->setData(self::getModelForStaticClass(), $this->id, $this->set_fillable);
         }
         
-        $this->setId(Connection::getInstance()->saveData(substr(strrchr(static::class, "\\"), 1), $this->fillable));
+        $this->setId(Connection::getInstance()->saveData(self::getModelForStaticClass(), $this->set_fillable));
 
         return is_int($this->getId());
     }
 
     public function update(array $data): bool
     {
-        $this->setFillable($data);
+        $this->set_fillable->setFillable($data);
         return $this->save();
     }
 

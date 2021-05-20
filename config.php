@@ -6,5 +6,11 @@ const CONFIG = [
     ],
     'TemplateEngine' => [
         'type' => 'twig'
+    ],
+    'Fillable' => [
+        'type' => 'array'
+    ],
+    'Request' => [
+        'type' => 'default'
     ]
 ];

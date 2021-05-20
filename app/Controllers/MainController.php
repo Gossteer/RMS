@@ -15,8 +15,8 @@ class MainController
     public function index()
     {
         return TemplateEngine::getInstance()->render('main/index.php', [
-            'hotels' => Hotel::all()->getData(),
-            'hotel_categories' => HotelCategory::all()->getData()
+            'hotels' => Hotel::all()->toArray(),
+            'hotel_categories' => HotelCategory::all()->toArray()
         ]);
     }
 
