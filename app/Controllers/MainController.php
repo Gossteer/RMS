@@ -2,11 +2,13 @@
 
 namespace App\Controllers;
 
+use App\Components\Abstracts\Controller;
 use App\Components\TemplateEngine\TemplateEngine;
+use App\Models\Floor;
 use App\Models\Hotel;
 use App\Models\HotelCategory;
 
-class MainController
+class MainController extends Controller
 {
 
     /**
@@ -15,8 +17,9 @@ class MainController
     public function index()
     {
         return TemplateEngine::getInstance()->render('main/index.php', [
-            'hotels' => Hotel::all()->toArray(),
-            'hotel_categories' => HotelCategory::all()->toArray()
+            'hotels' => Hotel::with('Floor', 'HotelCategory')->all()->toArray(),
+            'hotel_categories' => HotelCategory::all()->toArray(),
+            'floors' => Floor::all()->toArray()
         ]);
     }
 

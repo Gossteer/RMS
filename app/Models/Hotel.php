@@ -17,7 +17,8 @@ class Hotel extends Models
             'HotelCategory'
         ],
         'oneToMany' => [
-            'Employee'
-        ]
+            'Employee',
+            'Floor'
+        ],
     ];
 }

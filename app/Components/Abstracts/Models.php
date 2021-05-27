@@ -24,9 +24,10 @@ abstract class Models implements iModels, iRelationship
 
     public static function all(): DataBaseModelCollection
     {
-        return new DataBaseModelCollection(Connection::getInstance()->getData(self::getModelForStaticClass()), static::class);
+        return new DataBaseModelCollection(Connection::getInstance()->getData(self::getModelForStaticClass(), null, null, null, null, self::withExist()), static::class);
     }
 
+    //TODO: сделать для нижних методов возможность with
     public static function equalGet($equal_field, $equal_value): DataBaseModelCollection
     {
         return new DataBaseModelCollection(Connection::getInstance()->getData(self::getModelForStaticClass(), null, null, $equal_field, $equal_value), static::class);
@@ -48,10 +49,11 @@ abstract class Models implements iModels, iRelationship
 
     public static function find(int $id): self
     {
+        //Получаем экземпляр класса Fillable
+        //TODO:Нужно сделать лучше, т.к получается как-то не очень
         $data = Connection::getInstance()->getData(self::getModelForStaticClass(), 1, $id);
-
         if ($data) {
-            return new static($data);
+            return new static($data->toArray());
         }
 
         throw new Exception('Данные не найдены');
@@ -64,7 +66,7 @@ abstract class Models implements iModels, iRelationship
 
     public function destroy(): bool
     {
-        if ($this->id) {
+        if (is_int($this->id)) {
             return Connection::getInstance()->deleteData(self::getModelForStaticClass(), $this->id);
         }
 
@@ -73,10 +75,11 @@ abstract class Models implements iModels, iRelationship
 
     public function save(): bool
     {
+        //Если мы сохраняем уже существующую модель
         if (is_int($this->id)) {
             return Connection::getInstance()->setData(self::getModelForStaticClass(), $this->id, $this->set_fillable);
         }
-        
+
         $this->setId(Connection::getInstance()->saveData(self::getModelForStaticClass(), $this->set_fillable));
 
         return is_int($this->getId());

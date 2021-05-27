@@ -34,7 +34,8 @@ class Router
     private function getURI()
     {
         if (!empty($_SERVER['REQUEST_URI'])) {
-            return trim($_SERVER['REQUEST_URI'], '/');
+            $trim = trim($_SERVER['REQUEST_URI'], '/');
+            return stristr($trim , '?', true) ?:$trim;
         }
     }
 
@@ -50,6 +51,7 @@ class Router
         if ($uri === '') {
             return $this->route('', ROUTES[''], $uri);
         }
+        
         // Проверяем наличие такого запроса в массиве маршрутов (routes.php)
         foreach ($this->routes as $uriPattern => $path) {
             // Сравниваем $uriPattern и $uri
@@ -77,9 +79,7 @@ class Router
         $controllerName = array_shift($segments) . 'Controller';
         $controllerName = '\App\Controllers\\' . ucfirst($controllerName);
 
-        $actionName = explode('?', array_shift($segments))[0];
-
-        $parameters = $segments;
+        $actionName = $segments[0];
 
         // Создать объект, вызвать метод (т.е. action)
         $controllerObject = new $controllerName;
@@ -87,7 +87,7 @@ class Router
         /* Вызываем необходимый метод ($actionName) у определенного 
          * класса ($controllerObject) с заданными ($parameters) параметрами
          */
-        $this->result = $controllerObject->$actionName($this->getRequest($parameters, $_GET, $_POST));
+        $this->result = $controllerObject->$actionName($this->getRequest($_SESSION, $_GET, $_POST));
 
         // Если метод контроллера успешно вызван, завершаем работу роутера
         if ($this->result != null) {
@@ -99,12 +99,12 @@ class Router
         return false;
     }
 
-    private function getRequest(array $parameters = [], array $get = [], array $post = []): Request
+    private function getRequest(array $session = [], array $get = [], array $post = []): Request
     {
         return Setting::getRequest([
             'get' => $get,
             'post' => $post,
-            'parameters' => $parameters
+            'session' => $session
         ]);
     }
 }

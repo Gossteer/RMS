@@ -10,7 +10,6 @@ session_start();
 
 require_once ROOT . '/vendor/autoload.php';
 
-
 // Вызов Router
 $router = new Router();
 (new Start())->run();

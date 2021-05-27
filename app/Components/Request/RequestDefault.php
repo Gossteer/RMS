@@ -9,6 +9,6 @@ class RequestDefault extends Request
     protected array $fillable = [
         'get' => [],
         'post' => [],
-        'parameters' => []
+        'session' => []
     ];
 }

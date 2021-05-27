@@ -12,13 +12,13 @@ class SessionConnection implements iTypeConnection
     public function getData(string $modal_name, int $count = null, int $id = null, $equal_field = null, $equal_value = null): Fillable
     {
         if ($equal_field and !is_null($equal_value)) {
-            return array_filter($this->getSession($modal_name), function ($value) use ($equal_value, $equal_field) {
+            return Setting::getFillable(array_filter($this->getSession($modal_name), function ($value) use ($equal_value, $equal_field) {
                 return $value[$equal_field] === $equal_value ? true : false;
-            });
+            }));
         }
 
         if (is_int($id)) {
-            return $this->getSession($modal_name, $id);
+            return Setting::getFillable($this->getSession($modal_name, $id));
         }
 
         return Setting::getFillable(array_slice($this->getSession($modal_name), 0, $count, true));
