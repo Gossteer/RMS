@@ -1,0 +1,78 @@
+version: '3.9'
+
+services:
+    # NGINX container
+    nginx:
+        container_name: ${APP_NAME}-nginx
+        build:
+            context: .docker/nginx
+            dockerfile: Dockerfile
+        ports:
+            - 88:80
+        volumes:
+            - .:/var/www/${APP_NAME}
+            - .docker/nginx/logs:/var/log/nginx
+        links:
+            - php
+            - ${DB_CONNECTION}
+        networks:
+            - ${APP_NAME}-network
+
+    # PHP FastCGI Process Manager container
+    php:
+        container_name: ${APP_NAME}-php
+        build:
+            context: .
+            dockerfile: .docker/php/Dockerfile
+            args:
+              - APP_ENV=${APP_ENV}
+              - APP_NAME=${APP_NAME}
+        volumes:
+            - .:/var/www/${APP_NAME}
+            - .docker/php/php.ini:/usr/etc/php/php.ini
+        networks:
+            - ${APP_NAME}-network
+
+    # mysql container
+    mysql:
+      container_name: ${APP_NAME}-${DB_CONNECTION}
+      hostname: ${DB_CONNECTION}
+      build:
+        context: .docker/${DB_CONNECTION}
+        dockerfile: Dockerfile
+      volumes:
+        - mysql_data:/var/lib/${DB_CONNECTION}
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: ${DB_DATABASE}
+        MYSQL_USER: ${DB_USERNAME}
+        MYSQL_PASSWORD: ${DB_PASSWORD}
+        SERVICE_TAGS: ${APP_ENV}
+        SERVICE_NAME: mysql
+      ports:
+        - 3310:3306
+      networks:
+        - ${APP_NAME}-network
+
+    # PMA client container
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin
+      container_name: ${APP_NAME}-pma
+      links:
+        - mysql
+      environment:
+        PMA_HOST: ${APP_NAME}-${DB_CONNECTION}
+        PMA_PORT: 3306
+        PMA_ARBITRARY: 1
+      restart: always
+      ports:
+        - 92:80
+      networks:
+        - ${APP_NAME}-network
+
+networks:
+  RMS-network:
+      driver: bridge
+
+volumes:
+    mysql_data:
