@@ -5,14 +5,14 @@ services:
     nginx:
         container_name: ${APP_NAME}-nginx
         build:
-            context: .docker/dev/nginx
+            context: .docker/prod/nginx
             dockerfile: Dockerfile
         restart: "always"
         ports:
             - 88:80
         volumes:
             - .:/var/www/${APP_NAME}
-            - .docker/dev/nginx/logs:/var/log/nginx
+            - .docker/prod/nginx/logs:/var/log/nginx
         links:
             - php
         networks:
@@ -23,27 +23,16 @@ services:
         container_name: ${APP_NAME}-php
         build:
             context: .
-            dockerfile: .docker/dev/php/Dockerfile
+            dockerfile: .docker/prod/php/Dockerfile
             args:
               - APP_ENV=${APP_ENV}
               - APP_NAME=${APP_NAME}
         restart: always
         volumes:
             - .:/var/www/${APP_NAME}
-            - .docker/dev/php/php.ini:/usr/etc/php/php.ini
+            - .docker/prod/php/php.ini:/usr/etc/php/php.ini
         networks:
             - ${APP_NAME}-network
-
-    # composer:
-    #     restart: 'no'
-    #     image: composer/composer
-    #     networks:
-    #     - ${APP_NAME}-network
-    #     volumes:
-    #     - .:/var/www/${APP_NAME}
-    #     container_name: composer
-    #     working_dir: /var/www/${APP_NAME}
-    #     command: install -o
 
 networks:
   RMS-network:

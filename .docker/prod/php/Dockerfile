@@ -44,7 +44,7 @@ RUN docker-php-ext-install intl
 RUN docker-php-ext-install pcntl
 
 # Custom php.ini config
-COPY .docker/php/php.ini /usr/etc/php/php.ini
+COPY .docker/prod/php/php.ini /usr/etc/php/php.ini
 
 # Install Xdebug
 # RUN pecl install xdebug
