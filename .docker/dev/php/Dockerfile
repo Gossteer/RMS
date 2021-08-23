@@ -1,6 +1,9 @@
 # Image
 FROM php:7.4.21-fpm
 
+ARG APP_ENV
+ARG APP_NAME
+
 # Starting from scratch
 RUN apt-get clean
 RUN apt-get -y autoremove
@@ -61,12 +64,9 @@ RUN apt-get -y autoremove
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Set up default directory
-ARG APP_ENV
-ARG APP_NAME
 WORKDIR /var/www/$APP_NAME
 #
 ## Composer install
-# COPY --from=composer /usr/bin/composer /usr/bin/composer
 # RUN composer install -o
 #
 ## Node install

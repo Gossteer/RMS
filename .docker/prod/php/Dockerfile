@@ -1,6 +1,10 @@
 # Image
 FROM php:7.4.21-fpm
 
+ARG APP_ENV
+ARG APP_NAME
+COPY . /var/www/$APP_NAME
+
 # Starting from scratch
 RUN apt-get clean
 RUN apt-get -y autoremove
@@ -66,8 +70,8 @@ ARG APP_NAME
 WORKDIR /var/www/$APP_NAME
 #
 ## Composer install
-# COPY --from=composer /usr/bin/composer /usr/bin/composer
-# RUN composer install -o
+RUN composer install -o
 #
 ## Node install
-# RUN npm run-script $APP_ENV
+RUN npm i
+RUN npm run-script $APP_ENV
