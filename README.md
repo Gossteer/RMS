@@ -10,8 +10,8 @@ npm i
 
 npm run build
 
-# Без докера
+## Без докера
 php -S localhost:8000
 
-# Через докер
+## Через докер
 docker-compose -f docker-compose.yml up --build
