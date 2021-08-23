@@ -2,6 +2,6 @@
 composer.phar
 composer.lock
 /node_modules
-.docker/local/nginx/logs/*.log
-.docker/stage/nginx/logs/*.log
+.docker/nginx/logs/*.log
 .env
+package-lock.json

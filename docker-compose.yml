@@ -14,7 +14,6 @@ services:
             - .docker/nginx/logs:/var/log/nginx
         links:
             - php
-            - ${DB_CONNECTION}
         networks:
             - ${APP_NAME}-network
 
@@ -33,46 +32,6 @@ services:
         networks:
             - ${APP_NAME}-network
 
-    # mysql container
-    mysql:
-      container_name: ${APP_NAME}-${DB_CONNECTION}
-      hostname: ${DB_CONNECTION}
-      build:
-        context: .docker/${DB_CONNECTION}
-        dockerfile: Dockerfile
-      volumes:
-        - mysql_data:/var/lib/${DB_CONNECTION}
-      environment:
-        MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: ${DB_DATABASE}
-        MYSQL_USER: ${DB_USERNAME}
-        MYSQL_PASSWORD: ${DB_PASSWORD}
-        SERVICE_TAGS: ${APP_ENV}
-        SERVICE_NAME: mysql
-      ports:
-        - 3310:3306
-      networks:
-        - ${APP_NAME}-network
-
-    # PMA client container
-    phpmyadmin:
-      image: phpmyadmin/phpmyadmin
-      container_name: ${APP_NAME}-pma
-      links:
-        - mysql
-      environment:
-        PMA_HOST: ${APP_NAME}-${DB_CONNECTION}
-        PMA_PORT: 3306
-        PMA_ARBITRARY: 1
-      restart: always
-      ports:
-        - 92:80
-      networks:
-        - ${APP_NAME}-network
-
 networks:
   RMS-network:
       driver: bridge
-
-volumes:
-    mysql_data:
