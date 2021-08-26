@@ -9,12 +9,17 @@ services:
             dockerfile: Dockerfile
         restart: "always"
         volumes:
+            - .:/var/www/${APP_NAME}
             - .docker/prod/nginx/logs:/var/log/nginx
         links:
             - php
         labels:
+            - "traefik.enable=true"
             - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)"
-            - "traefik.http.routers.${APP_NAME}.entrypoints=web"
+            - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
+            - "traefik.http.routers.webserver.tls=true"
+            - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
+            - "traefik.port=80"
 
     # PHP FastCGI Process Manager container
     php:
@@ -23,10 +28,11 @@ services:
             context: .
             dockerfile: .docker/prod/php/Dockerfile
             args:
-              - APP_ENV=${APP_ENV}
-              - APP_NAME=${APP_NAME}
+                - APP_ENV=${APP_ENV}
+                - APP_NAME=${APP_NAME}
         restart: always
         volumes:
+            - .:/var/www/${APP_NAME}
             - .docker/prod/php/php.ini:/usr/etc/php/php.ini
         labels:
             - traefik.enable=false

@@ -62,14 +62,14 @@ RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 ARG APP_ENV
 ARG APP_NAME
-COPY . /var/www/$APP_NAME
+# COPY . /var/www/$APP_NAME
 
 # Set up default directory
 WORKDIR /var/www/$APP_NAME
 #
 ## Composer install
-RUN composer install -o
+# RUN composer install -o
 #
 ## Node install
-RUN npm i
-RUN npm run-script $APP_ENV
+# RUN npm i
+# RUN npm run-script $APP_ENV

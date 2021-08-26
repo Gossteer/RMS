@@ -11,6 +11,7 @@ services:
         ports:
             - 88:80
         volumes:
+            - .:/var/www/${APP_NAME}
             - .docker/prod/nginx/logs:/var/log/nginx
         links:
             - php
@@ -28,6 +29,7 @@ services:
               - APP_NAME=${APP_NAME}
         restart: always
         volumes:
+            - .:/var/www/${APP_NAME}
             - .docker/prod/php/php.ini:/usr/etc/php/php.ini
         networks:
             - rms-network
@@ -35,3 +37,7 @@ services:
 networks:
   rms-network:
       driver: bridge
+
+volumes:
+    data:
+        driver: local
