@@ -2,20 +2,19 @@ version: '3.9'
 
 services:
     # NGINX container
-    nginx:
-        container_name: ${APP_NAME}-nginx
+    rms:
+        container_name: ${APP_NAME}
         build:
             context: .docker/prod/nginx
             dockerfile: Dockerfile
         restart: "always"
-        ports:
-            - 88:80
         volumes:
             - .docker/prod/nginx/logs:/var/log/nginx
         links:
             - php
-        networks:
-            - rms-network
+        labels:
+            - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)"
+            - "traefik.http.routers.${APP_NAME}.entrypoints=web"
 
     # PHP FastCGI Process Manager container
     php:
@@ -29,9 +28,10 @@ services:
         restart: always
         volumes:
             - .docker/prod/php/php.ini:/usr/etc/php/php.ini
-        networks:
-            - rms-network
+        labels:
+            - traefik.enable=false
 
 networks:
-  rms-network:
-      driver: bridge
+  default:
+    external: 
+      name: traefik

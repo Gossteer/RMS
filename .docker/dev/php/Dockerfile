@@ -1,9 +1,6 @@
 # Image
 FROM php:7.4.21-fpm
 
-ARG APP_ENV
-ARG APP_NAME
-
 # Starting from scratch
 RUN apt-get clean
 RUN apt-get -y autoremove

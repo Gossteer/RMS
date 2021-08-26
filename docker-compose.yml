@@ -48,5 +48,5 @@ services:
     #     command: install -o
 
 networks:
-  RMS-network:
+  rms-network:
       driver: bridge
