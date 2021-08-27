@@ -7,7 +7,7 @@ services:
         build:
             context: .docker/prod/nginx
             dockerfile: Dockerfile
-        restart: "always"
+        restart: 'unless-stopped'
         volumes:
             - .:/var/www/${APP_NAME}
             - .docker/prod/nginx/logs:/var/log/nginx
@@ -16,10 +16,8 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)"
-            - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
-            - "traefik.http.routers.${APP_NAME}webserver.tls=true"
-            - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
-            - "traefik.port=80"
+            - "traefik.http.routers.${APP_NAME}.entrypoints=web"
+            - "traefik.http.routers.${PROJ_NAME}.tls.certresolver=myresolver"
 
     # PHP FastCGI Process Manager container
     php:
