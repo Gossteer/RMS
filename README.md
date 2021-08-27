@@ -15,3 +15,5 @@ php -S localhost:8000
 
 ## Через докер
 docker-compose -f docker-compose.yml up --build
+
+### [Пример работы](https://rms.gossteer.ru/)
