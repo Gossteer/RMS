@@ -17,7 +17,9 @@ services:
             - "traefik.enable=true"
             - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)"
             - "traefik.http.routers.${APP_NAME}.entrypoints=web"
-            - "traefik.http.routers.${PROJ_NAME}.tls.certresolver=myresolver"
+            - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
+            - "traefik.http.routers.${APP_NAME}.tls.domains[0].main=${DOMAIN}"
+            - "traefik.http.routers.${APP_NAME}.tls.domains[0].sans=www.${DOMAIN}"   
 
     # PHP FastCGI Process Manager container
     php:
