@@ -16,7 +16,7 @@ services:
         labels:
             - "traefik.enable=true"
             - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN}`)"
-            - "traefik.http.routers.${APP_NAME}.entrypoints=web"
+            - "traefik.http.routers.${APP_NAME}.entrypoints=websecure"
             - "traefik.http.routers.${APP_NAME}.tls.certresolver=myresolver"
             - "traefik.http.routers.${APP_NAME}.tls.domains[0].main=${DOMAIN}"
             - "traefik.http.routers.${APP_NAME}.tls.domains[0].sans=www.${DOMAIN}"   
